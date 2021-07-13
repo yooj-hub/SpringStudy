@@ -15,17 +15,18 @@ import toby.spring.vol1.user.domain.User;
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 //@SpringBootTest
 //@ContextConfiguration(classes = DaoFactory.class)
 public class UserDaoTest {
 
-//    @Autowired
+    //    @Autowired
     private UserDao dao;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(DaoFactory.class);
-        this.dao=ac.getBean("userDao",UserDao.class);
+        this.dao = ac.getBean("userDao", UserDao.class);
     }
 
 
@@ -67,8 +68,6 @@ public class UserDaoTest {
         assertThat(userGet1.getId()).isEqualTo(user1.getId());
         User userGet2 = dao.get(user2.getId());
         assertThat(userGet2.getId()).isEqualTo(user2.getId());
-
-
     }
 
     @Test

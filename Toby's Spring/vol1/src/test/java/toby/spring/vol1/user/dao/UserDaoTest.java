@@ -13,14 +13,24 @@ import org.springframework.test.context.ContextConfiguration;
 import toby.spring.vol1.user.domain.User;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 //@SpringBootTest
 //@ContextConfiguration(classes = DaoFactory.class)
+
+//@SpringBootTest
 public class UserDaoTest {
 
-    //    @Autowired
+    private User user1 = new User("esw", "은승원1", "1234");
+    private User user2 = new User("esw2", "은승원2", "12345");
+    private User user3 = new User("esw3", "은승원3", "123456");
+
+
+
+
+        @Autowired
     private UserDao dao;
 
     @BeforeEach
@@ -51,9 +61,7 @@ public class UserDaoTest {
     public void 가입및조회() throws SQLException, ClassNotFoundException {
 
         //given
-        User user1 = new User("esw", "은승원1", "1234");
-        User user2 = new User("esw2", "은승원2", "12345");
-        User user3 = new User("esw3", "은승원3", "123456");
+
         dao.deleteAll();
 
         //when
@@ -61,6 +69,7 @@ public class UserDaoTest {
         dao.addUser(user1);
         dao.addUser(user2);
         dao.addUser(user3);
+
 
         //then
         assertThat(dao.getCount()).isEqualTo(3);
@@ -81,5 +90,9 @@ public class UserDaoTest {
         org.junit.jupiter.api.Assertions.assertThrows(EmptyResultDataAccessException.class, () -> dao.get("123123123"));
 
     }
+//    @Test
+//    public void getAll(){
+//
+//    }
 
 }

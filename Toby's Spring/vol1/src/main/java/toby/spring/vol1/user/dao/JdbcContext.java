@@ -15,6 +15,8 @@ public class JdbcContext {
         this.dataSource = dataSource;
     }
 
+
+    //StatementStrategy 의 makePreparedStatement 는 ps를 리턴한다.
     public void workWithStatementStrategy(StatementStrategy stmt) throws SQLException {
         Connection c = null;
         PreparedStatement ps = null;

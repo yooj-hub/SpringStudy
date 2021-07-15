@@ -28,9 +28,7 @@ public class UserDaoTest {
     private User user3 = new User("esw3", "은승원3", "123456");
 
 
-
-
-        @Autowired
+    @Autowired
     private UserDao dao;
 
     @BeforeEach

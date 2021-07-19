@@ -1,60 +1,29 @@
-#server:
-#  port: 9090
-#  autoconfigure:
-#    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 spring:
-
   datasource:
     url: jdbc:mysql://localhost:3306/toby
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       username: root
       password: dmstmddnjs32!
-
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
+
     properties:
       hibernate:
         show_sql: true
-        format_sql : true
-        use_sql_comments: true
+        format_sql: true
+  devtools:
+    livereload:
+      enabled: true
+  freemarker:
+    cache: false
+
 
 logging:
   level:
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql:
-              trace
-
-
-#  jpa:
-#    properties:
-#      hibernate:
-#        format_sql: true
-#    hibernate:
-#      ddl-auto: create
-#
-#
-##
-##logging:
-##  level: trace
-##  spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-#logging:
-#  level:
-#    org:
-#      hibernate:
-#        type:
-#          descriptor:
-#            sql: trace
-#
-#
-
-
-
-
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
 
 
 

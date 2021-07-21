@@ -3,6 +3,7 @@ package toby.spring.vol1.user;
 import net.bytebuddy.dynamic.scaffold.FieldLocator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import toby.spring.vol1.user.dao.Level;
 import toby.spring.vol1.user.domain.User;
@@ -19,6 +20,7 @@ public class UserTest {
     }
 
     @Test
+    @DisplayName("123")
     public void 레벨_업그레이드() {
         //given
         Level[] levels = Level.values();

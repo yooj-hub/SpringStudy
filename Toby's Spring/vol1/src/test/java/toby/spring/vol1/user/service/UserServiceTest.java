@@ -1,6 +1,7 @@
 package toby.spring.vol1.user.service;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,6 +45,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("123")
     public void 유저서비스가_null_이아닌가() throws Exception {
         //given
 

@@ -14,7 +14,7 @@ public class CalcSumTest {
     @BeforeEach
     public void setUp() {
         this.calculator = new Calculator();
-        this.numFilepath = "F:\\SpringStudy\\Toby's Spring\\vol1\\src\\test\\resources\\numbers.txt";
+        this.numFilepath = "/Users/yujeongmin/Desktop/github/Toby's Spring/Toby's Spring/vol1/src/test/resources/numbers.txt";
 
     }
 

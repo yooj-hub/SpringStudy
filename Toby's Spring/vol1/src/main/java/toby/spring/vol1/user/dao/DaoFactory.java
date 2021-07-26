@@ -1,7 +1,6 @@
 package toby.spring.vol1.user.dao;
 
 import javax.sql.DataSource;
-import javax.transaction.TransactionManager;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +8,9 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
 import toby.spring.vol1.user.service.UserService;
+import toby.spring.vol1.user.service.UserServiceImpl;
+import toby.spring.vol1.user.service.UserServiceTx;
+import toby.spring.vol1.user.service.asdasda;
 import toby.spring.vol1.user.upgradepolicy.UpgradePolicy;
 import toby.spring.vol1.user.upgradepolicy.UpgradePolicyImpl;
 
@@ -54,12 +56,14 @@ public class DaoFactory {
 
     @Bean
     public UserService userService() {
-        UserService userService = new UserService();
-        userService.setUserDao(userDao());
-        userService.setUpgradePolicy(upgradePolicy());
-        userService.setDataSource(dataSource());
-        userService.setTransactionManager(transactionManager());
+        UserServiceTx userService = new UserServiceTx();
+        userService.setUserService(userServiceImpl());
+//        userServiceImpl.setUserDao(userDao());
+//        userServiceImpl.setUpgradePolicy(upgradePolicy());
+//        userServiceImpl.setDataSource(dataSource());
+//        userServiceImpl.setTransactionManager(transactionManager());
         return userService;
+
     }
 
     @Bean
@@ -67,5 +71,11 @@ public class DaoFactory {
         return new UpgradePolicyImpl();
     }
 
-
+    @Bean
+    public UserServiceImpl userServiceImpl() {
+        UserServiceImpl userService = new UserServiceImpl();
+        userService.setUserDao(userDao());
+        userService.setUpgradePolicy(upgradePolicy());
+        return userService;
+    }
 }

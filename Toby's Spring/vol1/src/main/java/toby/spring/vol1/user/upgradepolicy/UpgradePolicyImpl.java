@@ -1,17 +1,21 @@
 package toby.spring.vol1.user.upgradepolicy;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
 import toby.spring.vol1.user.dao.Level;
 import toby.spring.vol1.user.dao.UserDao;
 import toby.spring.vol1.user.domain.User;
-import toby.spring.vol1.user.service.UserService;
 
-import static toby.spring.vol1.user.service.UserService.MIN_LOGCOUNT_FOR_UPGRADE;
-import static toby.spring.vol1.user.service.UserService.MIN_RECOMMEND_FOR_GOLD;
+import static toby.spring.vol1.user.service.asdasda.MIN_LOGCOUNT_FOR_UPGRADE;
+import static toby.spring.vol1.user.service.asdasda.MIN_RECOMMEND_FOR_GOLD;
+
 
 public class UpgradePolicyImpl implements UpgradePolicy {
     @Autowired
     UserDao userDao;
+
+    private MailSender mailSender;
+
 
     @Override
     public boolean canUpgradeLevel(User user) {
@@ -34,6 +38,7 @@ public class UpgradePolicyImpl implements UpgradePolicy {
         user.upgradeLevel();
         userDao.update(user);
     }
+
 
 
 

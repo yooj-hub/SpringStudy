@@ -9,7 +9,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import toby.spring.vol1.user.dao.Level;
 import toby.spring.vol1.user.dao.UserDao;
 import toby.spring.vol1.user.domain.User;
-import toby.spring.vol1.user.upgradepolicy.UpgradePolicyImpl;
 
 
 import java.util.Arrays;
@@ -17,13 +16,13 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static toby.spring.vol1.user.service.UserService.MIN_LOGCOUNT_FOR_UPGRADE;
-import static toby.spring.vol1.user.service.UserService.MIN_RECOMMEND_FOR_GOLD;
+import static toby.spring.vol1.user.service.asdasda.MIN_LOGCOUNT_FOR_UPGRADE;
+import static toby.spring.vol1.user.service.asdasda.MIN_RECOMMEND_FOR_GOLD;
 
 @SpringBootTest
-public class UserServiceTest {
+public class UserServiceImplTest {
     @Autowired
-    UserService userService;
+    UserServiceImpl userServiceImpl;
 
     @Autowired
     UserDao userDao;
@@ -52,7 +51,7 @@ public class UserServiceTest {
         //when
 
         //then
-        assertThat(userService).isNotNull();
+        assertThat(userServiceImpl).isNotNull();
 
     }
 
@@ -65,7 +64,7 @@ public class UserServiceTest {
         }
 
         //when
-        userService.upgradeLevels();
+        userServiceImpl.upgradeLevels();
 
         //then
         checkLevelUpgraded(users.get(0), false);
@@ -94,8 +93,8 @@ public class UserServiceTest {
 
         //when
 
-        userService.add(userWithLevel);
-        userService.add(userWithoutLevel);
+        userServiceImpl.add(userWithLevel);
+        userServiceImpl.add(userWithoutLevel);
 
         User userWithLevelRead = userDao.get(userWithLevel.getId());
         User userWithoutLevelRead = userDao.get(userWithoutLevel.getId());
@@ -106,7 +105,6 @@ public class UserServiceTest {
 
 
     }
-
 
 
 }

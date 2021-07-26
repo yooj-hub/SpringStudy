@@ -28,6 +28,18 @@ dependencies {
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.7'
     implementation 'org.springframework.boot:spring-boot-devtools'
 
+// https://mvnrepository.com/artifact/javax.mail/mail
+    implementation 'javax.mail:mail:1.4.7'
+    // https://mvnrepository.com/artifact/javax.activation/activation
+    implementation 'javax.activation:activation:1.1.1'
+    // https://mvnrepository.com/artifact/org.springframework/spring-context-support
+    implementation 'org.springframework:spring-context-support:5.3.9'
+
+
+
+
+
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'

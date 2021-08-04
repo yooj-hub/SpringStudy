@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul><b>Item</b>
+    <li>item1.itemName=<span th:text="${item1.itemName}"></span></li>
+    <li>item1['itemName']=
+        <sapn th:text="${item1['itemName']}"></sapn>
+    </li>
+    <li>item1.getItemName=<span th:text="${item1.getItemName()}"></span></li>
+</ul>
+<ul><b>Items(list)</b>
+    <li>items[0].getId()=<span th:text="${items[0].getId()}"></span></li>
+    <li>items[0]['Id']=<span th:text="${items[0]['Id']}"></span></li>
+</ul>
+<p>
+    <span th:text="'abc abc'"></span>
+    <!-- abc abc-->
+</p>
+<p>
+    <span th:text="'abc '+'abc'"></span>
+    <!-- abc abc-->
+</p>
+<p>
+    <span th:text="|abc ${item1.itemName}|"></span>
+    <!-- abc item1-->
+</p>
+<p>
+    <span th:text="'abc '+${item1.itemName}"></span>
+    <!-- abc item1-->
+</p>
+<p>
+    <span th:text="(10==2)"></span>
+</p>
+<!-- false -->
+<p class="abc" th:attrappend="class=' aa'" th:attrprepend="class='bb '" th:classappend="cc">
+    <!--    <p class="bb abc aa cc">-->
+</p>
+<p>
+    <input type="text" name="abc" style="width: 300px" placeholder="name 변경을 확인하기 위한 Input" th:name="'thyme leaf'">
+    <!--    <input type="text" name="thyme leaf" style="width: 300px" placeholder="name 변경을 확인하기 위한 Input">-->
+</p>
+<table border="1">
+    <tr>
+        <th>id</th>
+        <th>itemName</th>
+    </tr>
+    <tr th:each="item, itemStat : ${items}">
+        <!--/*item 은 items 리스트의 원소이고 itemStat 은 index, count, size, even 등 다양한 기능을 제공한다.*/-->
+        <td><span th:text="|${itemStat.count}'번째 아이템의 id='${item.id}|"></span></td>
+        <td><span th:text="|${itemStat.count}'번째 아이템의 이름='${item.itemName}|"></span></td>
+    </tr>
+</table>
+<p>
+    <span th:text="'item1.itemName=&quot;item1&quot;'" th:if="${item1.itemName=='item1'}"></span>
+    <!--    출력이 됨-->
+    <span th:text="'item1.itemName=&quot;item2&quot;'" th:if="${item1.itemName=='item2'}"></span>
+    <!--    출력되지 않음-->
+</p>
+<script th:inline="javascript">
+    var item1Id = [[${item1.id}]];
+    var item1Name=[[${item1.itemName}]];
+    var itemFirst=[[${item1}]];
+    /**
+     *     결과
+     *     var item1Id = 1;
+     *     var item1Name="item1";
+     *     var itemFirst={"id":1,"itemName":"item1"};
+     */
+</script>
+</body>
+</html>

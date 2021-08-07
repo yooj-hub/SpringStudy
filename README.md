@@ -18,5 +18,12 @@
 
 - 개인 공부
 
+
+2021 08 04 부터 매일 공부한 내용관련 기록
+- 2021 08 04
+  - Thymeleaf Study
+    - https://yoojsblog.tistory.com/97?category=952186
+    - https://yoojsblog.tistory.com/98?category=952186
   
+
 

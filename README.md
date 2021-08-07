@@ -26,4 +26,5 @@
     - https://yoojsblog.tistory.com/98?category=952186
   
 
-
+- 2021 08 07
+  - Thymeleaf 메시지 국제화 및 validation study

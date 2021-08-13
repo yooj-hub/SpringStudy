@@ -25,6 +25,7 @@
   - Thymeleaf Study
     - https://yoojsblog.tistory.com/97?category=952186
     - https://yoojsblog.tistory.com/98?category=952186
+    - https://yoojsblog.tistory.com/116?category=952186
     
     
   
@@ -55,6 +56,20 @@
 
   - Spring Formatter & Converter Study
 
+  
+
 - 2021 08 12
+  
   - Spring File Upload Study
+  
+    
+  
+- 2021 08 13
+
+  - JPA Study
+    - 상세 : https://yoojsblog.tistory.com/118
+
+
+
+
 

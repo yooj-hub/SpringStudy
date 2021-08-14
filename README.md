@@ -66,8 +66,17 @@
   
 - 2021 08 13
 
-  - JPA Study
+  - JPA Study 영속성 컨텍스트 Study
     - 상세 : https://yoojsblog.tistory.com/118
+
+
+
+- 2021 08 14
+
+  - JPA 기본 매핑 및 annotation mapping study
+    - 상세: https://yoojsblog.tistory.com/121
+
+  
 
 
 

@@ -78,7 +78,9 @@
 
   
 
-
+- 2021 08 15
+  - JPA 연관 관계 매핑
+    - 상세: https://yoojsblog.tistory.com/125
 
 
 

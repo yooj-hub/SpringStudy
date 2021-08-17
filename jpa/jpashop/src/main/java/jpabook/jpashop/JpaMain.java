@@ -1,5 +1,6 @@
 package jpabook.jpashop;
 
+import jpabook.jpashop.domain.Book;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.Team;
 
@@ -17,34 +18,10 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-
-            Team team = new Team();
-            team.setName("TeamA");
-            Team team1 = new Team();
-            team1.setName("TeamB");
-            em.persist(team);
-            em.persist(team1);
-
-
-            Member member = new Member();
-            member.setUsername("member1");
-            member.changeTeam(team);
-            em.persist(member);
-
-            //db 에서 가져온걸 쓸려면 해야함
-//            em.flush();
-//            em.clear();
-
-            //위에 두 줄을 안할 경우 find 가 나중에 나감
-            Member find = em.find(Member.class, member.getId());
-            Team findTeam = find.getTeam();
-//            find.setTeam(team1);
-            System.out.println("findTeam.getName() = " + findTeam.getName());
-            List<Member> findMembers = findTeam.getMembers();
-            for (Member findMember : findMembers) {
-                System.out.println("findMember = " + findMember.getUsername());
-            }
-
+            Book book = new Book();
+            book.setName("JPA");
+            book.setAuthor("김영한");
+            em.persist(book);
 
             tx.commit();
         } catch (Exception e) {

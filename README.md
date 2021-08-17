@@ -81,6 +81,11 @@
 - 2021 08 15
   - JPA 연관 관계 매핑
     - 상세: https://yoojsblog.tistory.com/125
+  
+- 2021 08 17
+
+  - JPA 고급 매핑 Study
+    - 상세: https://yoojsblog.tistory.com/130
 
 
 

@@ -8,6 +8,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class JpaMain {
 
@@ -17,23 +18,33 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
+            Member member = new Member();
+            member.setUsername("member");
+            member.setHomeAddress(new Address("homecity1", "street", "100000"));
 
-            Child child1 = new Child();
-            child1.setName("A");
-            Child child2 = new Child();
-            child2.setName("B");
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("족발");
+            member.getFavoriteFoods().add("피자");
 
+            member.getAddressHistory().add(new AddressEntity("old1", "street", "100000"));
+            member.getAddressHistory().add(new AddressEntity("old2", "street", "100000"));
 
-            Parent parent = new Parent();
-            parent.addChild(child1);
-            parent.addChild(child2);
-            em.persist(parent);
-
+            em.persist(member);
             em.flush();
             em.clear();
 
-            Parent findParent = em.find(Parent.class, parent.getId());
-            findParent.getChildList().remove(0);
+
+            System.out.println("=========================START=======================");
+            Member findMember = em.find(Member.class, member.getId());
+            Address a = findMember.getHomeAddress();
+            findMember.setHomeAddress(new Address("newCity", a.getStreet(), a.getZipcode()));
+
+//            findMember.getFavoriteFoods().remove("치킨");
+//            findMember.getFavoriteFoods().add("한식");
+
+
+//            findMember.getAddressHistory().remove(new Address("old1", "street", "100000"));
+//            findMember.getAddressHistory().add(new Address("newCity1", "street", "100000"));
 
             tx.commit();
         } catch (Exception e) {

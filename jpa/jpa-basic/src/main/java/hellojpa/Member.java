@@ -1,24 +1,13 @@
 package hellojpa;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Entity
-//@Table(name ="asd") 원하는 테이블에 삽입가능
-//@Table(name = "MBR")
-//@SequenceGenerator(name = "member_seq_generator", sequenceName = "member_seq")
-//@SequenceGenerator(
-//        name = "MEMBER_SEQ_GENERATOR",
-//        sequenceName = "MEMBER_SEQ",
-//        initialValue = 1, allocationSize = 50)
-public class Member extends BaseEntity{
 
-
-    //    @GeneratedValue(strategy = GenerationType.AUTO) // db 방언에 맞게 생성
-//    @GeneratedValue(strategy = GenerationType.IDENTITY) // db 방언에 맞게 생성
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR") // db 방언에 맞게 생성
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) // db 방언에 맞게 생성
     @Column(name = "MEMBER_ID")
@@ -27,28 +16,32 @@ public class Member extends BaseEntity{
     @Column(name = "USERNAME") // username in java // name in db column
     private String username;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="TEAM_ID")
-//    @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false)
-    private Team team;
 
-//    @OneToOne(mappedBy = "member")
-////    @JoinColumn(name="LOCKER_ID")
-//    private Locker locker;
+    //주소
+    @Embedded
+    private Address homeAddress;
 
-    @OneToMany(mappedBy = "product")
-    private List<MemberProduct> products = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(name = "FAVORITE_FOOD", joinColumns =
+    @JoinColumn(name = "MEMBER_ID")
+    )
+    @Column(name = "FOOD_NAME")
+    private Set<String> favoriteFoods = new HashSet<>();
+//    @ElementCollection
+//    @CollectionTable(name = "ADDRESS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+//    private List<Address> addressHistory = new ArrayList<>();
 
-    public Member() {
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name="MEMBER_ID")
+    private List<AddressEntity> addressHistory = new ArrayList<>();
+
+
+    public Long getId() {
+        return id;
     }
 
-
-    public List<MemberProduct> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<MemberProduct> products) {
-        this.products = products;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -59,21 +52,35 @@ public class Member extends BaseEntity{
         this.username = username;
     }
 
-    public Long getId() {
-        return id;
+    public Address getHomeAddress() {
+        return homeAddress;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
     }
 
-    public Team getTeam() {
-        return team;
+    public Set<String> getFavoriteFoods() {
+        return favoriteFoods;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setFavoriteFoods(Set<String> favoriteFoods) {
+        this.favoriteFoods = favoriteFoods;
     }
 
+//    public List<Address> getAddressHistory() {
+//        return addressHistory;
+//    }
+//
+//    public void setAddressHistory(List<Address> addressHistory) {
+//        this.addressHistory = addressHistory;
+//    }
 
+    public List<AddressEntity> getAddressHistory() {
+        return addressHistory;
+    }
+
+    public void setAddressHistory(List<AddressEntity> addressHistory) {
+        this.addressHistory = addressHistory;
+    }
 }

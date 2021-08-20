@@ -87,5 +87,14 @@
   - JPA 고급 매핑 Study
     - 상세: https://yoojsblog.tistory.com/130
 
+- 2021 08 18
 
+  - 프록시 및 연관관계 Study
+    - 상세: https://yoojsblog.tistory.com/135
+
+  
+
+- 2021 08 19
+
+  - 값 타입 Study
 

@@ -98,3 +98,225 @@ List<Member> members = em.createQuery(cq).getResultList();
 
 
 
+- 엔티티와 속성ㅇ은 대소문자 구별
+- JPQL 키워드는 대소문자 구분 X
+- 엔티티 이름 사용, 테이블 이름이 아님
+
+select m from Member as m where m.age>18
+
+
+
+select
+	count(m),
+	sum(m.age),
+	avg(m.age),
+	max(m.age),
+	min(m.age)
+from Member m
+
+
+
+## Projection
+
+
+
+TypeQuery 반환타입이 명확할 경우
+
+Query 반환타입이 명확하지 않을 경우
+
+결과가 하나 이상일 경우 리스트 반환 .gerResultList()
+
+결과가 정확히 하나일 때 getSingleResult();
+
+
+
+```java
+Member singleResult = em.createQuery("select m from Member as m where m.username = :username", Member.class)
+        .setParameter("username", "member1")
+        .getSingleResult();
+```
+
+
+
+select m from Member m -> 엔티티 프로젝션
+
+select m.team from Member m -> 엔티티 프로젝션
+
+select m.address from Member m -> 임베디드 타입 프로젝션
+
+Select m.username, m.age from Member m
+
+distinct 를 맨앞에 넣으면 중복이 제거된다.
+
+
+
+```java
+//직접 명시
+List resultList = em.createQuery("select m.username, m.age from Member as m").getResultList();
+Object o = resultList.get(0);
+Object[] result = (Object[]) o;
+System.out.println("result[0] = " + result[0]);
+System.out.println("result[0] = " + result[1]);
+```
+
+
+
+```
+//제네릭으로 Object[]를 넣어줌
+List<Object[]> resultList = em.createQuery("select m.username, m.age from Member as m").getResultList();
+for (Object[] objects : resultList) {
+    for (Object object : objects) {
+        System.out.println("object = " + object);
+    }
+}
+```
+
+
+
+```java
+//new 사용
+List<MemberDto> resultList = em.createQuery("select new jpql.MemberDto(m.username, m.age) from Member as m", MemberDto.class).getResultList();
+System.out.println("resultList = " + resultList);
+```
+
+
+
+## 페이징
+
+
+
+```java
+List<Member> resultList = em.createQuery("select m from Member m order by m.age asc ", Member.class).setFirstResult(0).setMaxResults(10).getResultList();
+```
+
+
+
+
+
+
+
+## 조인
+
+
+
+내부 조인(멤버 내에 팀이 있을경우)
+
+select m from Member m [inner] join m.team t 
+
+
+
+외부 조인(멤버에 팀이 없을 경우)
+
+select m from Member m left join m.team t
+
+
+
+세타 조인(연관관계 없는것을 조인 할 경우)
+
+select count(m) from Member m, Team t where m.username =t.name
+
+
+
+On 절
+
+- 조인 대상 필터링
+- 연관관계 없는 엔티티 외부 조인(하이버네이트 5.1 부터)
+
+
+
+select m, t from Member m left join Team t on m.username = t.name
+
+
+
+연관관계 없는 엔티티 외부 조인
+
+select count(m) from Member m, Team t where m.username = t.name
+
+
+
+## 서브 쿼리 지원 함수
+
+
+
+나이가 평균보다 많은 회원
+
+- select m from Member m
+  where m.age > (select avg(m2.age)from Member m2)
+
+한건이라도 주문한 고객
+
+- select m from Member m
+  Where (select count(o) from Order o where m = o.member)>0
+
+EXISTS 서브쿼리에 결과가 존재하면 참
+
+- ALL ANY SOME
+- ALL 모두 만족하면 참
+- ANY, SOME 같은 의미, 조건을 하날도 만족하면 참
+
+In 하나라도 같은 것이 있으면 참
+
+- Where와 Having 절에서만 서브 쿼리 사용 가능
+- select 절도 가능(하이버네이트에서 지원)
+- From 절의 서브 쿼리는 현재 JPQL에서 불가능
+
+
+
+
+
+
+
+## 조건식
+
+
+
+기본 Case 식
+
+select
+
+​	case when m.age <=10 then '학생요금'
+
+​			 when m.age >=10 then '경로요금'
+
+​			 else '일반요금'
+
+​	end
+
+from Member m
+
+
+
+단순 Case 식
+
+select
+
+​	case t.name
+
+​				when '팀A' then '인센티브110$'
+
+​				when '팀B' then '인센티브120$'
+
+​				else '인센티브105$'
+
+​	end
+
+from Team t
+
+
+
+COALESCE 하나씩 조회해서 null이 아니면 반환
+
+NULLIF 두 값이 같으면 null 아닐경우 첫값 반환
+
+
+
+
+
+
+
+
+
+
+
+
+

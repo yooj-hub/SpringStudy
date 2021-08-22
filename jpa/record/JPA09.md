@@ -6,11 +6,19 @@
 
 
 
+
+
 - JPQL
 - JPA Criteria
 - QueryDSL
 - 네이티브 SQL
 - JDBC API 직접 사용
+
+
+
+
+
+---
 
 
 
@@ -44,6 +52,12 @@ List<Member> result = em.createQuery("select m from Member m where m.username li
 
 
 
+---
+
+
+
+
+
 
 
 ## JPA Criteria
@@ -67,12 +81,26 @@ List<Member> members = em.createQuery(cq).getResultList();
 
 
 
+---
+
+
+
+
+
 ## QueryDsl
 
 
 
 - 문자가 아닌 자바코드로 JPQL 사용가능
 - 단순하고 쉽고, 실무사용 권장
+
+
+
+
+
+---
+
+
 
 
 
@@ -86,9 +114,25 @@ List<Member> members = em.createQuery(cq).getResultList();
 
 
 
+
+
+---
+
+
+
+
+
+
+
 ## JDBC API
 
 - JPA와 연관 없는 API이용시 flush를해서 db에 강제 저장후 이용해야한다.
+
+
+
+---
+
+
 
 
 
@@ -98,9 +142,9 @@ List<Member> members = em.createQuery(cq).getResultList();
 
 
 
-- 엔티티와 속성ㅇ은 대소문자 구별
+- 엔티티와 속성은 대소문자 구별
 - JPQL 키워드는 대소문자 구분 X
-- 엔티티 이름 사용, 테이블 이름이 아님
+- 엔티티 이름 사용한다.
 
 select m from Member as m where m.age>18
 
@@ -116,19 +160,23 @@ from Member m
 
 
 
+---
+
+
+
+
+
+
+
 ## Projection
 
 
 
-TypeQuery 반환타입이 명확할 경우
-
-Query 반환타입이 명확하지 않을 경우
-
+TypeQuery 반환타입이 명확할 경우의 반환타입
+Query 반환타입이 명확하지 않을 경우의 변환타입
 결과가 하나 이상일 경우 리스트 반환 .gerResultList()
-
 결과가 정확히 하나일 때 getSingleResult();
-
-
+distinct 를 맨앞에 넣으면 중복이 제거된다.
 
 ```java
 Member singleResult = em.createQuery("select m from Member as m where m.username = :username", Member.class)
@@ -138,17 +186,7 @@ Member singleResult = em.createQuery("select m from Member as m where m.username
 
 
 
-select m from Member m -> 엔티티 프로젝션
-
-select m.team from Member m -> 엔티티 프로젝션
-
-select m.address from Member m -> 임베디드 타입 프로젝션
-
-Select m.username, m.age from Member m
-
-distinct 를 맨앞에 넣으면 중복이 제거된다.
-
-
+2개 이상의 타입을 select 할 경우
 
 ```java
 //직접 명시
@@ -161,7 +199,7 @@ System.out.println("result[0] = " + result[1]);
 
 
 
-```
+```java
 //제네릭으로 Object[]를 넣어줌
 List<Object[]> resultList = em.createQuery("select m.username, m.age from Member as m").getResultList();
 for (Object[] objects : resultList) {
@@ -181,13 +219,33 @@ System.out.println("resultList = " + resultList);
 
 
 
+
+
+---
+
+
+
+
+
+
+
 ## 페이징
+
+
 
 
 
 ```java
 List<Member> resultList = em.createQuery("select m from Member m order by m.age asc ", Member.class).setFirstResult(0).setMaxResults(10).getResultList();
 ```
+
+
+
+.setFirstResult(시작 인덱스)를 넣고 .setMaxResult(가져올 인덱스의 개수)를 넣어서 페이징을 쉽게 할 수 있다.
+
+
+
+---
 
 
 
@@ -199,13 +257,15 @@ List<Member> resultList = em.createQuery("select m from Member m order by m.age 
 
 
 
-내부 조인(멤버 내에 팀이 있을경우)
+
+
+내부 조인(해당 변수 내에 대상이 있을 경우)
 
 select m from Member m [inner] join m.team t 
 
 
 
-외부 조인(멤버에 팀이 없을 경우)
+외부 조인(해당 변수 내에 대상이 없을 경우)
 
 select m from Member m left join m.team t
 
@@ -214,6 +274,8 @@ select m from Member m left join m.team t
 세타 조인(연관관계 없는것을 조인 할 경우)
 
 select count(m) from Member m, Team t where m.username =t.name
+
+
 
 
 
@@ -234,7 +296,17 @@ select count(m) from Member m, Team t where m.username = t.name
 
 
 
+
+
+---
+
+
+
+
+
 ## 서브 쿼리 지원 함수
+
+
 
 
 
@@ -243,24 +315,37 @@ select count(m) from Member m, Team t where m.username = t.name
 - select m from Member m
   where m.age > (select avg(m2.age)from Member m2)
 
+  
+
+  
+
 한건이라도 주문한 고객
 
 - select m from Member m
   Where (select count(o) from Order o where m = o.member)>0
 
+  
+
 EXISTS 서브쿼리에 결과가 존재하면 참
+
+
 
 - ALL ANY SOME
 - ALL 모두 만족하면 참
 - ANY, SOME 같은 의미, 조건을 하날도 만족하면 참
+- 
 
-In 하나라도 같은 것이 있으면 참
+In 절 하나라도 같은 것이 있으면 참
+
+
 
 - Where와 Having 절에서만 서브 쿼리 사용 가능
 - select 절도 가능(하이버네이트에서 지원)
 - From 절의 서브 쿼리는 현재 JPQL에서 불가능
 
 
+
+---
 
 
 
@@ -304,7 +389,10 @@ from Team t
 
 
 
-COALESCE 하나씩 조회해서 null이 아니면 반환
+COALESCE 하나씩 조회해서 null이 아니면 반환 
+COALESCE(m.username, 'username is null')을 할 경우 m.username == null일 경우 뒤의 username is null을 반환
+
+
 
 NULLIF 두 값이 같으면 null 아닐경우 첫값 반환
 
@@ -312,7 +400,36 @@ NULLIF 두 값이 같으면 null 아닐경우 첫값 반환
 
 
 
+## JPQL 기본 함수
 
+
+
+- CONCAT
+  - 문자열 더하기 지원 CONCAT('a','b')
+- SUBSTRING
+  - 자바의 substring과 동일
+- TRIM
+  - 공백 제거
+- LOWER, UPPER
+  - 대, 소문자
+- LENGTH
+  - 문자의 길이
+- LOCATE
+  - 해당 문자열의 위치를 리턴('pattern','pattern')
+- ABS,SQRT,MOD
+  - 해당 숫자 관련 함수
+- SIZE,INDEX(JPA 별도)
+  - size는 크기 반환, index는 OrderColumn을 사용할 경우 사용가능
+
+
+
+
+
+---
+
+
+
+> 출처 : 인프런 김영한님의 JPA강의
 
 
 

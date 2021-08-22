@@ -37,6 +37,10 @@ public class Team {
         return members;
     }
 
+    public void setMembers(List<Member> members) {
+        this.members = members;
+    }
+
     public void setMember(List<Member> members) {
         this.members = members;
     }

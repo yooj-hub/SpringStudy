@@ -97,4 +97,17 @@
 - 2021 08 19
 
   - 값 타입 Study
+  
+- 2021 08 21
+
+  - JPQL 기본문법
+
+    - 상세:https://yoojsblog.tistory.com/137?category=954082
+
+      
+
+- 2021 08 22
+
+  -  JPQL 중급문법
+    - 상세:https://yoojsblog.tistory.com/138?category=954082
 

@@ -110,4 +110,11 @@
 
   -  JPQL 중급문법
     - 상세:https://yoojsblog.tistory.com/138?category=954082
+    
+      
 
+- 2021 08 23
+
+  - SPRING JPA Study (JPA-SHOP)
+
+    

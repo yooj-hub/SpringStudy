@@ -121,3 +121,10 @@
 
 - 2021 08 24
   - SPRING JPA Study (JPA-SHOP)
+  
+    
+  
+- 2021 08 26
+
+  - Spring JPA API Study
+    - 상세: https://yoojsblog.tistory.com/146

@@ -128,3 +128,10 @@
 
   - Spring JPA API Study
     - 상세: https://yoojsblog.tistory.com/146
+
+
+
+2021 08 27
+
+- Spring JPA API Study
+  - 상세: https://yoojsblog.tistory.com/147

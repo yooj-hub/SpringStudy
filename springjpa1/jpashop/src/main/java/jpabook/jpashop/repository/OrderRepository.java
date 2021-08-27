@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -59,7 +60,28 @@ public class OrderRepository {
         ).getResultList();
     }
 
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                        "select o from Order o " +
+                                "join fetch o.member " +
+                                "join fetch o.delivery",
+                        Order.class
+                ).setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
 
+
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                // distinct 는 db에서는 효과가 없으나, jpa의 distinct는 중복을 제거해준다.
+                "select distinct o from Order o " +
+                        "join fetch o.member " +
+                        "join fetch o.delivery d " +
+                        "join fetch  o.orderItems oi " +
+                        "join fetch oi.item", Order.class
+        ).getResultList();
+    }
 
 
 }

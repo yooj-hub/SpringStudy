@@ -7,6 +7,7 @@ import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.order.query.OrderQueryRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 public class OrderApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderQueryRepository orderQueryRepository;
 
     @GetMapping("/api/v1/orders")
     public Result ordersV1() {
@@ -56,10 +58,25 @@ public class OrderApiController {
     @GetMapping("/api/v3.1/orders")
     public Result ordersV3_page(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
-            @RequestParam(value = "limit", defaultValue = "100") int limit)
-    {
-        return new Result(orderRepository.findAllWithMemberDelivery(offset,limit)// ToOne 관계를 가져옴
+            @RequestParam(value = "limit", defaultValue = "100") int limit) {
+        return new Result(orderRepository.findAllWithMemberDelivery(offset, limit)// ToOne 관계를 가져옴
                 .stream().map(o -> new OrderDto(o)).collect(Collectors.toList()));
+    }
+
+    @GetMapping("/api/v4/orders")
+    public Result ordersV4() {
+        return new Result(orderQueryRepository.findOrderQueryDtos());// ToOne 관계를 가져옴
+    }
+
+
+    @GetMapping("/api/v5/orders")
+    public Result ordersV5() {
+        return new Result(orderQueryRepository.findAllByDto_optimization());// ToOne 관계를 가져옴
+    }
+
+    @GetMapping("/api/v6/orders")
+    public Result ordersV6() {
+        return new Result(orderQueryRepository.findAllByDto_flat());// ToOne 관계를 가져옴
     }
 
     @Getter

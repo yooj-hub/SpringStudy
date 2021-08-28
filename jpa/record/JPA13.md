@@ -169,7 +169,7 @@ V4. JPA에서 DTO로 바로 조회하는 경우(fetch x)
 
 
 
-### 엔티티 컬렉션 노출(orderItems)
+### V1. 엔티티 컬렉션 노출(orderItems)
 
 ```java
 @GetMapping("/api/v1/orders")
@@ -193,7 +193,7 @@ public Result ordersV1() {
 
 
 
-
+V2. DTO를 사용
 
 ```java
 @GetMapping("/api/v2/orders")
@@ -303,7 +303,7 @@ jpa.properties.hibernate.default_batch_fetch_size: 100 # 한번에 가져오는 
 
 
 
-
+V3.1
 
 ```java
 public List<Order> findAllWithMemberDelivery(int offset, int limit) {
@@ -345,3 +345,102 @@ batch size를 정하는법
 
 - 최대 1000개(DB에 따라 다름)
 - 100 ~ 1000 권장(대부분의 경우가 1000개가 좋음 단, 순간적으로 application 과 db에 순간적인 부하가 간다.)
+
+
+
+
+
+---
+
+
+
+
+
+JPA에서 DTO 직접 조회
+
+V4
+
+```java
+public List<OrderQueryDto> findOrderQueryDtos() {
+    List<OrderQueryDto> result = findOrders();
+
+    result.forEach(o -> {
+        List<OrderItemQueryDto> orderItems = findOrderItems(o.getOrderId());
+        o.setOrderItems(orderItems);
+    });
+    return result;
+}
+
+private List<OrderItemQueryDto> findOrderItems(Long orderId) {
+    return em.createQuery(
+            "select new jpabook.jpashop.repository.order.query.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, i.stockQuantity) " +
+                    " from OrderItem oi" +
+                    " join oi.item i" +
+                    " where oi.order.id = :orderId", OrderItemQueryDto.class).setParameter("orderId", orderId).getResultList();
+}
+
+public List<OrderQueryDto> findOrders() {
+    return em.createQuery(
+            "select new jpabook.jpashop.repository.order.query.OrderQueryDto(o.id, m.name, o.orderDate,o.status,d.address) from Order o" +
+                    " join o.member m" +
+                    " join o.delivery d", OrderQueryDto.class).getResultList();
+
+
+}
+```
+
+
+
+
+
+다음과 같이 할 경우 OrderItem에서 N+1문제가 발생하게 된다.
+
+V5
+
+```java
+public List<OrderQueryDto> findAllByDto_optimization() {
+    List<OrderQueryDto> result = findOrders();
+
+    Map<Long, List<OrderItemQueryDto>> orderItemMap = findOrderItemMap(toOrderIds(result));
+
+    result.forEach(o -> o.setOrderItems(orderItemMap.get(o.getOrderId())));
+    return result;
+}
+
+private Map<Long, List<OrderItemQueryDto>> findOrderItemMap(List<Long> orderIds) {
+    List<OrderItemQueryDto> orderItems = em.createQuery(
+            "select new jpabook.jpashop.repository.order.query.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, i.stockQuantity) " +
+                    " from OrderItem oi" +
+                    " join oi.item i" +
+                    " where oi.order.id in :orderIds", OrderItemQueryDto.class).setParameter("orderIds", orderIds).getResultList();
+
+    Map<Long, List<OrderItemQueryDto>> orderItemMap = orderItems.stream().collect(Collectors.groupingBy(orderItemQueryDto -> orderItemQueryDto.getOrderId()));
+    return orderItemMap;
+}
+
+private List<Long> toOrderIds(List<OrderQueryDto> result) {
+    List<Long> orderIds = result.stream().map(o -> o.getOrderId()).collect(Collectors.toList());
+    return orderIds;
+}
+```
+
+
+
+코드자체가 길지만 기존의 fetch 조인보다 쿼리수가 적다. 하지만, 유지보수가 좋지 않다.
+
+V6
+
+```java
+public List<OrderFlatDto> findAllByDto_flat() {
+    return em.createQuery(
+                    "select new jpabook.jpashop.repository.order.query.OrderFlatDto(o.id, m.name, o.orderDate, o.status,d.address,i.name,oi.orderPrice,oi.count)" +
+                            " from Order o" +
+                            " join o.member m" +
+                            " join o.delivery d" +
+                            " join o.orderItems oi" +
+                            " join oi.item i", OrderFlatDto.class)
+            .getResultList();
+
+
+}
+```

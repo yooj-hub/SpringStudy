@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.entity.Member;
+import study.datajpa.entity.Team;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,6 +18,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemberJpaRepositoryTest {
     @Autowired
     MemberJpaRepository memberJpaRepository;
+
+    @Autowired
+    TeamJpaRepository teamJpaRepository;
+
+    @Autowired
+    EntityManager em;
 
     @Test
     void testMember() {
@@ -98,6 +106,50 @@ class MemberJpaRepositoryTest {
         assertThat(members.size()).isEqualTo(3);
         assertThat(totalCount).isEqualTo(5);
 
+    }
+
+    @Test
+    void bulkUpdate(){
+        //given
+        memberJpaRepository.save(new Member("member1", 10));
+        memberJpaRepository.save(new Member("member2", 19));
+        memberJpaRepository.save(new Member("member3", 20));
+        memberJpaRepository.save(new Member("member4", 21));
+        memberJpaRepository.save(new Member("member5", 40));
+
+
+        //when
+        int resultCount = memberJpaRepository.bulkAgePlus(20);
+
+        assertThat(resultCount).isEqualTo(3);
+    }
+
+    @Test
+    void findMemberLazy() throws Exception {
+        //given
+
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamJpaRepository.save(teamA);
+        teamJpaRepository.save(teamB);
+
+        Member member1 = new Member("member1",10,teamA);
+        Member member2 = new Member("member2",10,teamB);
+        memberJpaRepository.save(member1);
+        memberJpaRepository.save(member2);
+
+        em.flush();
+        em.clear();
+
+        //when
+        System.out.println("======================================================");
+        List<Member> members = memberJpaRepository.findAll();
+        for (Member member : members) {
+            System.out.println("member = " + member.getUsername());
+            System.out.println("member.getTeam().getName() = " + member.getTeam().getName());
+        }
+
+        //then
     }
 
 

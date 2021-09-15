@@ -37,6 +37,8 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
     List<Member> findTop3ByAgeGreaterThan(int age);
 
+    <T> List<T> findProjectionsByUsername(@Param("username")String username, Class<T> type);
+
     @Modifying(clearAutomatically = true) // 없을 경우 executeUpdate 가 안나가서 오류가난다.
     @Query("update Member m set m.age = m.age+1 where m.age >= :age")
     int bulkAgePlus(@Param("age") int age);
@@ -50,5 +52,8 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
     @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
     Member findReadOnlyByUsername(String username);
+
+
+
 
 }

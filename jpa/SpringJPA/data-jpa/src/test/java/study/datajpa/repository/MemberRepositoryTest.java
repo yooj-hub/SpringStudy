@@ -227,14 +227,30 @@ class MemberRepositoryTest {
 
     }
 
+
     @Test
-    void callCustom() throws Exception {
-        //given
-        List<Member> result = memberRepository.findMemberCustom();
+    void projections() {
+        Team teamA = new Team("teamA");
+        em.persist(teamA);
 
-        //when
+        Member m1 = new Member("m1", 0, teamA);
+        Member m2 = new Member("m2", 0, teamA);
+        em.persist(m1);
+        em.persist(m2);
 
-        //then
+        em.flush();
+        em.clear();
+
+//        NestedClosedProjections
+        List<NestedClosedProjections> result = memberRepository.findProjectionsByUsername("m1",NestedClosedProjections.class);
+        for (NestedClosedProjections nestedClosedProjections : result) {
+            System.out.println("nestedClosedProjections.getUsername() = " + nestedClosedProjections.getUsername());
+            System.out.println("nestedClosedProjections.getTeam().getName() = " + nestedClosedProjections.getTeam().getName());
+        }
+
+
+
+
     }
 
 

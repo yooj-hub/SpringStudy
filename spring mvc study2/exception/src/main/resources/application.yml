@@ -1,0 +1,8 @@
+server:
+  error:
+    whitelabel:
+      enabled: false
+    include-message: always
+#    include-exception: true
+#    include-stacktrace: on_param
+#    include-binding-errors: on_param

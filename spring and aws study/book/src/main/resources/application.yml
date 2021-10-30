@@ -1,0 +1,30 @@
+spring:
+  profiles:
+    include: oauth
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:tcp://localhost/~/POSTS
+      username: sa
+      password:
+      driver-class-name: org.h2.Driver
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+#                show_sql: true
+        format_sql: true
+#        use_sql_comments: true
+
+
+
+#logging:
+#  level:
+#    org.hibernate.SQL: debug
+
+#
